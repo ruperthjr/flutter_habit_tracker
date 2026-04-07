@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers.dart';
 import 'today_screen.dart';
+import 'challenges_screen.dart';
 import 'stats_screen.dart';
 import 'explore_screen.dart';
 import '../widgets/add_habit_sheet.dart';
@@ -10,16 +11,17 @@ import '../../../../core/theme/app_theme.dart';
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
 
+  static const _screens = [
+    TodayScreen(), ChallengesScreen(), SizedBox(), StatsScreen(), ExploreScreen(),
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tab = ref.watch(activeTabProvider);
     return Scaffold(
       backgroundColor: AppTheme.bg,
-      body: IndexedStack(index: tab, children: [
-        const TodayScreen(),
-        const StatsScreen(),
-        const SizedBox.shrink(),
-        const ExploreScreen(),
+      body: IndexedStack(index: tab > 1 ? tab - 1 : tab, children: const [
+        TodayScreen(), ChallengesScreen(), StatsScreen(), ExploreScreen(),
       ]),
       bottomNavigationBar: _BottomBar(currentTab: tab),
     );
@@ -42,16 +44,8 @@ class _BottomBar extends ConsumerWidget {
           height: 64,
           child: Row(
             children: [
-              _NavItem(
-                  icon: Icons.today_rounded,
-                  label: 'Today',
-                  idx: 0,
-                  cur: currentTab),
-              _NavItem(
-                  icon: Icons.emoji_events_rounded,
-                  label: 'Challenges',
-                  idx: 1,
-                  cur: currentTab),
+              _NavItem(icon: Icons.today_rounded,       label: 'Today',      idx: 0, cur: currentTab),
+              _NavItem(icon: Icons.emoji_events_rounded, label: 'Challenges', idx: 1, cur: currentTab),
               // FAB
               Expanded(
                 child: GestureDetector(
@@ -63,39 +57,24 @@ class _BottomBar extends ConsumerWidget {
                   ),
                   child: Center(
                     child: Container(
-                      width: 52,
-                      height: 52,
+                      width: 52, height: 52,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: LinearGradient(
                           colors: [Color(0xFF4A9EFF), Color(0xFF1A6ECC)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                          begin: Alignment.topLeft, end: Alignment.bottomRight,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0x664A9EFF),
-                            blurRadius: 16,
-                            offset: Offset(0, 4),
-                          )
-                        ],
+                        boxShadow: [BoxShadow(
+                          color: Color(0x664A9EFF), blurRadius: 16, offset: Offset(0, 4),
+                        )],
                       ),
-                      child: const Icon(Icons.add_rounded,
-                          color: Colors.white, size: 28),
+                      child: const Icon(Icons.add_rounded, color: Colors.white, size: 28),
                     ),
                   ),
                 ),
               ),
-              _NavItem(
-                  icon: Icons.bar_chart_rounded,
-                  label: 'Stats',
-                  idx: 2,
-                  cur: currentTab),
-              _NavItem(
-                  icon: Icons.explore_rounded,
-                  label: 'Explore',
-                  idx: 3,
-                  cur: currentTab),
+              _NavItem(icon: Icons.bar_chart_rounded,  label: 'Stats',   idx: 3, cur: currentTab),
+              _NavItem(icon: Icons.explore_rounded,    label: 'Explore', idx: 4, cur: currentTab),
             ],
           ),
         ),
@@ -105,14 +84,8 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _NavItem extends ConsumerWidget {
-  const _NavItem(
-      {required this.icon,
-      required this.label,
-      required this.idx,
-      required this.cur});
-  final IconData icon;
-  final String label;
-  final int idx, cur;
+  const _NavItem({required this.icon, required this.label, required this.idx, required this.cur});
+  final IconData icon; final String label; final int idx, cur;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -124,14 +97,14 @@ class _NavItem extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon,
-                color: selected ? AppTheme.accent : AppTheme.textLow, size: 22),
+              color: selected ? AppTheme.accent : AppTheme.textLow,
+              size: 22),
             const SizedBox(height: 3),
             Text(label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: selected ? AppTheme.accent : AppTheme.textLow,
-                )),
+              style: TextStyle(
+                fontSize: 10, fontWeight: FontWeight.w500,
+                color: selected ? AppTheme.accent : AppTheme.textLow,
+              )),
           ],
         ),
       ),
