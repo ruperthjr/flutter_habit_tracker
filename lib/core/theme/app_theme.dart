@@ -36,7 +36,7 @@ class AppTheme {
     scaffoldBackgroundColor: bg,
     colorScheme: const ColorScheme.dark(
       primary: accent, secondary: green,
-      surface: surface, background: bg,
+      surface: surface,
     ),
     cardColor: card,
     textTheme: const TextTheme(
