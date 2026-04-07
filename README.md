@@ -1,9 +1,5 @@
 # Habit Tracker
 
-A Flutter habit tracker with daily streaks, time-of-day filtering, a nature progress scene, and full local SQLite persistence — no backend required.
-
----
-
 ## Screenshots
 
 | # | Screen | Description |
